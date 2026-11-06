@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Deepavali</title>
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Mukta:wght@400;600&family=Noto+Sans+Kannada:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--night:#14072e;--plum:#2a0f4d;--gold:#ffb627;--flame:#ff7a1a;--rose:#e8346f;--cream:#fff3dc;--muted:#cbb8e6;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(ellipse at 50% 110%,#5a1a6b 0,var(--night) 60%);color:var(--cream);font-family:Mukta,system-ui,sans-serif;font-size:18px;overflow-x:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.stars{position:fixed;inset:0;background-image:radial-gradient(1.5px 1.5px at 20% 30%,#fff8,transparent),radial-gradient(1px 1px at 70% 20%,#fff8,transparent),radial-gradient(1.5px 1.5px at 85% 65%,#fff6,transparent),radial-gradient(1px 1px at 35% 75%,#fff6,transparent),radial-gradient(1px 1px at 55% 45%,#fff7,transparent);z-index:0}
+.level{position:relative;z-index:2;min-height:100%;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 20px 40px;max-width:720px;margin:0 auto}
+.level.on{display:flex;animation:in .7s ease}
+@keyframes in{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+h1,h2{font-family:'Rozha One',Georgia,serif;font-weight:400;margin:0 0 12px;line-height:1.15;color:var(--gold)}
+h1{font-size:clamp(2.2rem,9vw,3.6rem)}
+h2{font-size:clamp(1.9rem,7.5vw,3rem)}
+p{margin:0 0 20px;line-height:1.55;color:var(--muted);max-width:34ch}
+.kn{font-family:'Noto Sans Kannada',Mukta,sans-serif;color:var(--gold);font-size:1.15rem;line-height:1.8;margin:0 0 18px}
+.kn-t{font-family:'Noto Sans Kannada',Mukta,sans-serif;font-size:1rem;line-height:1.8;color:var(--gold);margin-top:10px}
+.steps{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:5}
+.steps i{width:34px;height:5px;border-radius:3px;background:#ffffff30;transition:.4s}
+.steps i.on{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+input{font:inherit;font-size:1.1rem;padding:14px 18px;border-radius:14px;border:2px solid #ffb62760;background:#ffffff12;color:var(--cream);text-align:center;width:min(300px,100%);margin-bottom:18px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--cream);outline-offset:3px}
+.btn{font:inherit;font-weight:600;font-size:1.1rem;cursor:pointer;border:0;border-radius:40px;padding:14px 32px;color:#2b0a00;background:linear-gradient(135deg,var(--gold),var(--flame));box-shadow:0 6px 24px #ff7a1a66;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:none;color:var(--gold);border:2px solid var(--gold);box-shadow:none;margin-top:14px}
+.diya{width:150px;height:130px;position:relative;margin-bottom:18px}
+.bowl{position:absolute;bottom:0;left:0;right:0;height:52px;background:linear-gradient(#e8742a,#a6380d);border-radius:8px 8px 75px 75px;box-shadow:0 0 50px 8px #ff7a1a55}
+.flame{position:absolute;bottom:46px;left:50%;width:34px;height:70px;margin-left:-17px;background:radial-gradient(ellipse at 50% 75%,#fff6c8 0,var(--gold) 40%,var(--flame) 75%,transparent 76%);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;transform-origin:50% 100%;animation:flick 1.3s infinite ease-in-out;filter:drop-shadow(0 0 18px var(--flame))}
+@keyframes flick{0%,100%{transform:scale(1,1) rotate(-2deg)}50%{transform:scale(.92,1.08) rotate(3deg)}}
+.thought{font-family:'Rozha One',Georgia,serif;font-size:1.3rem;line-height:1.5;color:var(--cream);border:2px solid #ffb62750;border-radius:20px;padding:22px 24px;background:#ffffff0d;margin:10px 0 22px;max-width:30ch;min-height:10em;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.wish-sub{color:var(--gold);font-size:1.1rem;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%;margin:8px 0 18px}
+.gift{font:inherit;cursor:pointer;color:var(--cream);background:#ffffff10;border:2px solid #ffffff22;border-radius:18px;padding:16px 8px;transition:.2s}
+.gift:hover{transform:translateY(-3px);border-color:var(--gold)}
+.gift .e{font-size:2.4rem;display:block;margin-bottom:6px}
+.gift b{display:block;font-weight:600}
+.gift small{color:var(--muted)}
+.gift.sel{border-color:var(--gold);background:#ffb62724;box-shadow:0 0 22px #ffb62755}
+.reveal{display:none;border-radius:20px;padding:20px;background:linear-gradient(135deg,#ffb62730,#e8346f30);border:2px solid var(--gold);margin-bottom:8px;width:100%}
+.reveal.on{display:block;animation:in .5s ease}
+.reveal .big{font-size:3rem}
+.reveal h3{font-family:'Rozha One',Georgia,serif;font-weight:400;font-size:1.5rem;color:var(--gold);margin:4px 0 6px}
+.reveal p{margin:0 auto}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(prefers-reduced-motion:reduce){.flame,.level.on{animation:none}}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<canvas id="fx"></canvas>
+<div class="steps" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+
+<!-- Level 1 -->
+<section class="level on" id="l1">
+  <div class="diya" aria-hidden="true"><div class="flame"></div><div class="bowl"></div></div>
+  <h1>Welcome to Deepavali</h1>
+  <p class="kn">ದೀಪಾವಳಿ ಹಬ್ಬಕ್ಕೆ ಸುಸ್ವಾಗತ!</p>
+  <p id="welcomeText">The festival of lights has begun. Tell us your name to light your first diya.</p>
+  <input id="name" type="text" placeholder="Your name" maxlength="24" aria-label="Your name" autocomplete="given-name">
+  <button class="btn" id="go1">Light the diya and continue</button>
+</section>
+
+<!-- Level 2 -->
+<section class="level" id="l2">
+  <div class="wish-sub" id="hello">Happy Deepavali</div>
+  <h2 id="wishTitle">Happy Deepavali!</h2>
+  <p>May your home glow with joy, health and prosperity this festival of lights.</p>
+  <p class="kn">ನಿಮ್ಮ ಮನೆಯಲ್ಲಿ ಬೆಳಕು, ಸಂತೋಷ ಮತ್ತು ಸಮೃದ್ಧಿ ತುಂಬಿರಲಿ. ದೀಪಾವಳಿಯ ಹಾರ್ದಿಕ ಶುಭಾಶಯಗಳು!</p>
+  <div class="thought" id="thought"></div>
+  <button class="btn" id="go2">Choose your gift</button>
+  <button class="btn ghost" id="another">Another thought</button>
+</section>
+
+<!-- Level 3 -->
+<section class="level" id="l3">
+  <h2>Pick your Deepavali gift</h2>
+  <p>One surprise is waiting for you. Tap the gift you want.</p>
+  <p class="kn">ನಿಮಗಾಗಿ ಒಂದು ಉಡುಗೊರೆ ಕಾದಿದೆ. ನಿಮಗೆ ಇಷ್ಟವಾದದ್ದನ್ನು ಆರಿಸಿ!</p>
+  <div class="grid" id="grid"></div>
+  <div class="reveal" id="reveal" aria-live="polite"></div>
+  <button class="btn ghost" id="again">Start again</button>
+</section>
+
+<script>
+var user="Friend";
+var thoughts=[
+"Just as one diya lights a thousand others without losing its own flame, kindness shared never makes you poorer.",
+"Darkness is not fought with anger. It is answered with a small light, kept steady.",
+"Clean your home, forgive an old hurt, and begin the new year lighter.",
+"Real wealth is a full table, a quiet heart and people who are glad you came.",
+"Every night ends. Keep your lamp ready and the morning will find you smiling.",
+"Light a diya for someone who cannot light one today."
+];
+var gifts=[
+{e:"💰",n:"10% Salary Hike",s:"A raise you deserve",m:"Your 10% hike is confirmed. Hard work deserves a bright year ahead."},
+{e:"🏍️",n:"Brand-new Bike",s:"Ride into the new year",m:"Keys to your new bike are yours. Ride safe and ride far."},
+{e:"🍬",n:"Sweet Box",s:"Laddu, jalebi and more",m:"A big box of Deepavali sweets is on its way. Share it with everyone."},
+{e:"🪙",n:"Gold Coin",s:"Shine with prosperity",m:"A gold coin for a golden year. May Lakshmi bless your home."},
+{e:"📱",n:"New Smartphone",s:"Latest and fastest",m:"A brand-new smartphone is yours. Send your Deepavali wishes in style."},
+{e:"🎆",n:"Crackers Pack",s:"Bright and colourful",m:"A sparkling pack of crackers is yours. Celebrate safely and joyfully."},
+{e:"👗",n:"Festive Outfit",s:"Dress for the occasion",m:"A new festive outfit for your Deepavali photos."},
+{e:"✈️",n:"Holiday Trip",s:"Escape for a weekend",m:"A holiday trip is yours. Pack your bags and relax."},
+{e:"🎁",n:"Surprise Hamper",s:"Mystery goodies inside",m:"A surprise hamper full of festive treats is on its way."}
+];
+var kn=[
+"ಒಂದು ದೀಪ ಸಾವಿರ ದೀಪಗಳನ್ನು ಬೆಳಗಿಸಿದರೂ ತನ್ನ ಬೆಳಕನ್ನು ಕಳೆದುಕೊಳ್ಳುವುದಿಲ್ಲ.",
+"ಕತ್ತಲೆಯನ್ನು ಕೋಪದಿಂದ ಗೆಲ್ಲಲಾಗದು; ಪುಟ್ಟ ದೀಪದ ಬೆಳಕಿನಿಂದ ಗೆಲ್ಲಬೇಕು.",
+"ಮನೆಯನ್ನು ಸ್ವಚ್ಛಗೊಳಿಸಿ, ಹಳೆಯ ನೋವನ್ನು ಕ್ಷಮಿಸಿ, ಹೊಸ ವರ್ಷವನ್ನು ಹಗುರ ಮನಸ್ಸಿನಿಂದ ಆರಂಭಿಸಿ.",
+"ತುಂಬಿದ ಊಟದ ಮೇಜು, ಶಾಂತ ಮನಸ್ಸು ಮತ್ತು ನಮ್ಮನ್ನು ಪ್ರೀತಿಸುವವರೇ ನಿಜವಾದ ಸಂಪತ್ತು.",
+"ಪ್ರತಿ ರಾತ್ರಿಯೂ ಕೊನೆಗೊಳ್ಳುತ್ತದೆ. ನಿಮ್ಮ ದೀಪವನ್ನು ಸಿದ್ಧವಾಗಿಡಿ, ಬೆಳಗು ನಗುತ್ತಾ ಬರುತ್ತದೆ.",
+"ಇಂದು ದೀಪ ಹಚ್ಚಲಾಗದವರಿಗಾಗಿ ಒಂದು ದೀಪ ಹಚ್ಚಿ."
+];
+var $=function(i){return document.getElementById(i)};
+var dots=document.querySelectorAll('.steps i'),ti=0;
+function show(n){
+  document.querySelectorAll('.level').forEach(function(l,i){l.classList.toggle('on',i===n)});
+  dots.forEach(function(d,i){d.classList.toggle('on',i<=n)});
+  window.scrollTo(0,0);
+}
+function nextThought(){
+  var t=thoughts[ti%thoughts.length];ti++;
+  $('thought').innerHTML='<div></div><div class="kn-t"></div>';
+  $('thought').firstChild.textContent="“"+t+"”";
+  $('thought').lastChild.textContent=kn[(ti-1)%kn.length];
+}
+function go1(){
+  var v=$('name').value.trim();
+  if(v){user=v}
+  $('hello').textContent="Dear "+user+",";
+  $('wishTitle').textContent="Happy Deepavali!";
+  ti=Math.floor(Math.random()*thoughts.length);
+  nextThought();show(1);burst(3);
+}
+$('go1').onclick=go1;
+$('name').addEventListener('keydown',function(e){if(e.key==='Enter')go1()});
+$('another').onclick=nextThought;
+$('go2').onclick=function(){show(2);burst(2)};
+$('again').onclick=function(){
+  $('reveal').className='reveal';
+  document.querySelectorAll('.gift').forEach(function(g){g.classList.remove('sel')});
+  show(0);
+};
+var grid=$('grid');
+gifts.forEach(function(g){
+  var b=document.createElement('button');
+  b.className='gift';
+  b.innerHTML='<span class="e">'+g.e+'</span><b>'+g.n+'</b><small>'+g.s+'</small>';
+  b.onclick=function(){
+    document.querySelectorAll('.gift').forEach(function(x){x.classList.remove('sel')});
+    b.classList.add('sel');
+    var r=$('reveal');
+    r.innerHTML='<div class="big">'+g.e+'</div><h3>Congratulations, '+user.replace(/</g,'&lt;')+'!</h3><p>'+g.m+'</p><p class="kn">ದೀಪಾವಳಿಯ ಶುಭಾಶಯಗಳು! ಈ ಉಡುಗೊರೆ ನಿಮಗಾಗಿ.</p>';
+    r.className='reveal on';
+    burst(5);
+    r.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  grid.appendChild(b);
+});
+
+/* fireworks */
+var c=$('fx'),x=c.getContext('2d'),P=[],cols=['#ffb627','#ff7a1a','#e8346f','#fff3dc','#b86bff'];
+function size(){c.width=innerWidth;c.height=innerHeight}
+size();addEventListener('resize',size);
+function burst(n){
+  for(var k=0;k<n;k++){setTimeout(function(){
+    var cx=innerWidth*(.15+Math.random()*.7),cy=innerHeight*(.15+Math.random()*.4),col=cols[Math.floor(Math.random()*cols.length)];
+    for(var i=0;i<46;i++){var a=Math.PI*2*i/46,s=2+Math.random()*3;
+      P.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,c:col})}
+  },k*260)}
+  if(!running){running=true;loop()}
+}
+var running=false;
+function loop(){
+  x.clearRect(0,0,c.width,c.height);
+  P=P.filter(function(p){return p.l>0});
+  P.forEach(function(p){
+    p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.vx*=.985;p.l-=.014;
+    x.globalAlpha=Math.max(p.l,0);x.fillStyle=p.c;
+    x.beginPath();x.arc(p.x,p.y,2.2,0,6.3);x.fill();
+  });
+  if(P.length){requestAnimationFrame(loop)}else{running=false;x.clearRect(0,0,c.width,c.height)}
+}
+</script>
+</body>
+</html>
